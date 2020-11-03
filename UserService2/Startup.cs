@@ -71,6 +71,7 @@ namespace UserService2
 
             services.AddTransient<IUserBusiness, UserBusiness>(function => new UserBusiness(new UserDatabase()));
             services.AddMediatR(typeof(Startup));
+            services.AddHttpClient();
             
         }
 

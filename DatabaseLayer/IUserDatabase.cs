@@ -1,7 +1,9 @@
-﻿using Common.Models;
+﻿using Common.Events;
+using Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabaseLayer
 {
@@ -13,7 +15,7 @@ namespace DatabaseLayer
         List<Friend> GetFriends();
         Friend ConfirmFriendship(Friend friend);
         User GetUserByPassportId(long passportId);
-
+        Task AddEvent(UserAdded userAdded);
         User FindUserOrAdd(User user);
         bool AddFriend(Friend friend);
     }

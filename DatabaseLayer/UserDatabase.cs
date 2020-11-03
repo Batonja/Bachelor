@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Common.Events;
 using Common.Models;
 using DatabaseLayer.DataAccess;
@@ -20,6 +21,17 @@ namespace DatabaseLayer
             throw new NotImplementedException();
         }
 
+        public async Task AddEvent(UserAdded userAdded)
+        {
+            using (var session = _eventStore.OpenSession())
+            {
+                session.Events.Append(new Guid(), userAdded);
+                session.SaveChanges();
+            }
+            
+           
+        }
+
         public bool SignUp(User user)
         {
             int rowsEffected = 0;
@@ -30,18 +42,7 @@ namespace DatabaseLayer
                 rowsEffected = context.SaveChanges();
             }
 
-            if (rowsEffected > 0)
-            {
-                using (var session = _eventStore.OpenSession())
-                {
-                    UserAdded userAdded = new UserAdded() { User = user };
-                    session.Events.Append(new Guid(), userAdded);
-                    session.SaveChanges();
-                }
-                    return true;
-            }
-
-            return false;
+            return rowsEffected > 0 ? true : false;
         }
 
 

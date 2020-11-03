@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer;
 using Common.ErrorObjects;
+using Common.Events;
 using Common.Models;
 using Google.Apis.Auth;
 using MediatR;
@@ -21,11 +23,12 @@ namespace UserService2.Controllers
     {
         IMediator _mediatr; 
         IUserBusiness _userBusiness;
-
-        public UserController(IUserBusiness userBusiness,IMediator mediator)
+        IHttpClientFactory _httpClientFactory;
+        public UserController(IUserBusiness userBusiness,IMediator mediator, IHttpClientFactory clientFactory)
         {
             _userBusiness = userBusiness;
             _mediatr = mediator;
+            _httpClientFactory = clientFactory;
         }
 
         [HttpPost]
@@ -39,7 +42,25 @@ namespace UserService2.Controllers
         [HttpPost]
         public Holder<User> SignUp([FromBody] User user)
         {
-            return _userBusiness.SignUp(user);
+            Holder<User> retVal = _userBusiness.SignUp(user);
+            if ((int)retVal.ErrorCode == 200)
+            { 
+                _userBusiness.AddEvent(new UserDeleted() { User = retVal.Value });
+                UserCreatedAnnouncement();
+            }
+            return retVal;
+
+        }
+
+        public async Task UserCreatedAnnouncement()
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:5001/api/flight/UserIsCreated");
+            HttpClient client = _httpClientFactory.CreateClient();
+
+            await client.SendAsync(request);
+
+
+
         }
 
         [HttpPost]

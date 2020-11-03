@@ -1,4 +1,5 @@
 ﻿using Common.ErrorObjects;
+using Common.Events;
 using Common.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace BusinessLayer
         string Encrypt(string secret);
         List<Friend> GetFriends();
         User FindUserOrAdd(User user);
+        Task AddEvent(UserAdded userAdded);
         List<User> GetUsers();
     }
 }

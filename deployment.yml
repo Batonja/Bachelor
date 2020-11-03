@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: user
-        image: bdocker971/user:v8
+        image: bdocker971/user:v11
         ports:
         - containerPort: 8080     
 ---

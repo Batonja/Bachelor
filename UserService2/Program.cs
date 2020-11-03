@@ -26,7 +26,7 @@ namespace UserService2
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseUrls("http://*:8080"); // ovo je ovde da se server ne bi pokretao na portu 80 u dockeru sto je default u visualStudiju
+                .UseStartup<Startup>();
+              //  .UseUrls("http://*:8080"); // ovo je ovde da se server ne bi pokretao na portu 80 u dockeru sto je default u visualStudiju
     }
 }

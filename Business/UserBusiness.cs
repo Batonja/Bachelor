@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Helpers;
 using Common.ErrorObjects;
+using Common.Events;
 using Common.Models;
 using DatabaseLayer;
 
@@ -114,12 +115,21 @@ namespace BusinessLayer
             return _userDatabase.FindUserOrAdd(user);
         }
 
+
+        public async Task AddEvent(UserAdded userAdded)
+        {
+            await _userDatabase.AddEvent(userAdded);
+            
+        }
+
         #region helpers
 
         public Holder<User> CheckUser(User user, int errorCode, string description) =>
             errorCode == 200 ? Holder<User>.Success(user) : Holder<User>.Fail(errorCode, description);
         public Holder<Friend> CheckFriend(Friend friend, int errorCode, string description) =>
             errorCode == 200 ? Holder<Friend>.Success(friend) : Holder<Friend>.Fail(errorCode, description);
+
+        
 
         #endregion
     }
