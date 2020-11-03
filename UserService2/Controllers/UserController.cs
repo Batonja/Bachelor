@@ -46,13 +46,13 @@ namespace UserService2.Controllers
             if ((int)retVal.ErrorCode == 200)
             { 
                 _userBusiness.AddEvent(new UserDeleted() { User = retVal.Value });
-                UserCreatedAnnouncement();
+                UserEventAnnouncement();
             }
             return retVal;
 
         }
 
-        public async Task UserCreatedAnnouncement()
+        public async Task UserEventAnnouncement()
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:5001/api/flight/UserIsCreated");
             HttpClient client = _httpClientFactory.CreateClient();
