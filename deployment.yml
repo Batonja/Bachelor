@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flight-deployment
+  labels:
+    app: flight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flight
+  template:
+    metadata:
+      labels:
+        app: flight
+    spec:
+      containers:
+      - name: flight
+        image: bdocker971/flight:v2
+        ports:
+        - containerPort: 300    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flight-svc    
+spec:
+  type: LoadBalancer
+  selector:
+    app: flight
+  ports:
+    - protocol: TCP
+      port: 300
+    
+      
