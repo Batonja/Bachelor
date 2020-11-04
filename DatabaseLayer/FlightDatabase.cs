@@ -1,15 +1,45 @@
-﻿using Common.Models;
+﻿using Common.Events;
+using Common.Models;
 using DatabaseLayer.DataAccess;
+using Marten;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabaseLayer
 {
     public class FlightDatabase : IFlightDatabase
     {
+        DocumentStore _eventStore = EventStore.getStore();
+
+        public async Task UserIsCreated(Guid guid)
+        {
+            UserAdded userAddedEvent = new UserAdded();
+
+            using (var session = _eventStore.OpenSession())
+            {
+                var event1 = await session.Events.FetchStreamAsync(guid);
+                userAddedEvent = (UserAdded)event1[0].Data;
+
+                await session.SaveChangesAsync();
+                
+            }
+
+            if(userAddedEvent.User.UserId != 0)
+            {
+                using (var context = new DataContext(DataContext.ops.dbOptions))
+                {
+                    userAddedEvent.User.UserId = 0;
+                    context.Add(userAddedEvent.User);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+        }
+
         public List<Airline> Get()
         {
             List<Airline> airlines = new List<Airline>();

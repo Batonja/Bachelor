@@ -28,6 +28,12 @@ namespace FlightService.Controllers
             return retVal;
         }
 
+        [HttpPost]
+        public async Task UserIsCreated([FromBody]Guid guid)
+        {
+            await _flightBusiness.UserIsCreated(guid);
+        }
+
         [HttpGet]
         public List<FlightOrder> GetFlightOrders()
         {

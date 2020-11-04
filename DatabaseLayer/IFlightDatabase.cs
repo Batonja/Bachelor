@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabaseLayer
 {
@@ -12,6 +13,7 @@ namespace DatabaseLayer
         List<Airline> SearchWithDestination(SearchObject searchObject);
         List<Airline> Filter(List<Airline> airlines);
         List<FlightOrder> GetFlightOrders();
+        Task UserIsCreated(Guid guid);
 
         Airline Get(int id);
         bool ConfirmFlight(FlightOrder flightOrder);

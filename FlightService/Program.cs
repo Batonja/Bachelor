@@ -24,7 +24,7 @@ namespace FlightService
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseUrls("http://*:300");
+                .UseStartup<Startup>();
+                //.UseUrls("http://*:300");
     }
 }

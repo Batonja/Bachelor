@@ -3,6 +3,7 @@ using Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business
 {
@@ -13,7 +14,7 @@ namespace Business
         List<Airline> Search(SearchObject searchObject);
         List<Airline> Filter(FilterObject filterObject);
         List<FlightOrder> GetFlightOrders();
-
+        Task UserIsCreated(Guid guid);
         Holder<FlightOrder> ConfirmFlight(FlightOrder flightOrder);
         Holder<FlightOrder> DeleteFlightOrder(FlightOrder flightOrder);
         Holder<FlightOrder> OrderFlight(FlightOrder flightOrder);

@@ -4,6 +4,7 @@ using DatabaseLayer;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business
 {
@@ -11,6 +12,11 @@ namespace Business
     {
 
         IFlightDatabase _flightDatabase;
+
+        public async Task UserIsCreated(Guid guid)
+        {
+            await _flightDatabase.UserIsCreated(guid);
+        }
 
         public FlightBusiness(IFlightDatabase flightDatabase)
         {
