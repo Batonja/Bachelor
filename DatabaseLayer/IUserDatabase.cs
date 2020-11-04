@@ -15,7 +15,7 @@ namespace DatabaseLayer
         List<Friend> GetFriends();
         Friend ConfirmFriendship(Friend friend);
         User GetUserByPassportId(long passportId);
-        Task AddEvent(UserAdded userAdded);
+        Task<Guid> AddEvent(UserAdded userAdded);
         User FindUserOrAdd(User user);
         bool AddFriend(Friend friend);
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BusinessLayer;
 using Common.ErrorObjects;
@@ -14,6 +15,7 @@ using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using UserService2.Commands;
 
 namespace UserService2.Controllers
 {
@@ -44,22 +46,27 @@ namespace UserService2.Controllers
         {
             Holder<User> retVal = _userBusiness.SignUp(user);
             if ((int)retVal.ErrorCode == 200)
-            { 
-                _userBusiness.AddEvent(new UserDeleted() { User = retVal.Value });
-                UserEventAnnouncement();
+            {
+                var task = _mediatr.Send(new AddEventCommand(new UserAdded() { User = retVal.Value }));
+
+                Guid guid = task.Result;
+                    //_userBusiness.AddEvent(new UserAdded() { User = retVal.Value }).Result;
+                UserEventAnnouncement(guid);
             }
             return retVal;
 
         }
 
-        public async Task UserEventAnnouncement()
+        public async Task UserEventAnnouncement(Guid guid)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:5001/api/flight/UserIsCreated");
+            
+            var guidSerialized = new StringContent(JsonSerializer.Serialize(guid), Encoding.UTF8, "application/json");
+
             HttpClient client = _httpClientFactory.CreateClient();
 
-            await client.SendAsync(request);
+            var httpResponse = await client.PostAsync("https://localhost:5001/api/flight/UserIsCreated", guidSerialized);
 
-
+            httpResponse.EnsureSuccessStatusCode();
 
         }
 

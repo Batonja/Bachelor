@@ -7,6 +7,7 @@ namespace Common.Events
 {
     public class UserAdded
     {
+        public Guid Id { get; set; }
         public User User { get; set; }
 
     }

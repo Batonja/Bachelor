@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UserService2.Commands
 {
-    public class AddEventCommand : IRequest<Unit>
+    public class AddEventCommand : IRequest<Guid>
     {
         public AddEventCommand(UserAdded command)
         {

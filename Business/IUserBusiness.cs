@@ -17,7 +17,7 @@ namespace BusinessLayer
         string Encrypt(string secret);
         List<Friend> GetFriends();
         User FindUserOrAdd(User user);
-        Task AddEvent(UserAdded userAdded);
+        Task<Guid> AddEvent(UserAdded userAdded);
         List<User> GetUsers();
     }
 }

@@ -19,6 +19,17 @@ namespace BusinessLayer
             _userDatabase = userDatabase;
         }
 
+        public async Task<Guid> AddEvent(UserAdded userAdded)
+        {
+
+            Guid eventGuid = await _userDatabase.AddEvent(userAdded);
+
+            return eventGuid;
+            
+            
+
+        }
+
         public Holder<User> SignUp(User user)
         {
             User userFromDb = _userDatabase.GetUserByPassportId(user.PassportId);
@@ -116,11 +127,7 @@ namespace BusinessLayer
         }
 
 
-        public async Task AddEvent(UserAdded userAdded)
-        {
-            await _userDatabase.AddEvent(userAdded);
-            
-        }
+        
 
         #region helpers
 

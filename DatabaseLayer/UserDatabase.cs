@@ -21,12 +21,15 @@ namespace DatabaseLayer
             throw new NotImplementedException();
         }
 
-        public async Task AddEvent(UserAdded userAdded)
+        public async Task<Guid> AddEvent(UserAdded userAdded)
         {
             using (var session = _eventStore.OpenSession())
             {
-                session.Events.Append(new Guid(), userAdded);
+                userAdded.Id = Guid.NewGuid();
+
+                session.Events.Append(userAdded.Id, userAdded);
                 session.SaveChanges();
+                return userAdded.Id;
             }
             
            

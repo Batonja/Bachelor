@@ -9,7 +9,7 @@ using UserService2.Commands;
 
 namespace UserService2.Handlers
 {
-    public class AddEventHandler : IRequestHandler<AddEventCommand,Unit>
+    public class AddEventHandler : IRequestHandler<AddEventCommand,Guid>
     {
         IUserBusiness _userBusiness;
 
@@ -18,11 +18,9 @@ namespace UserService2.Handlers
             _userBusiness = userBusiness;
         }
 
-        public async Task<Unit> Handle(AddEventCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(AddEventCommand request, CancellationToken cancellationToken)
         {
-            await _userBusiness.AddEvent(request.Command);
-
-            return Unit.Value;
+            return await _userBusiness.AddEvent(request.Command);
             
         }
     }
