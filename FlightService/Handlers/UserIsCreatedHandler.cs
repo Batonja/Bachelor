@@ -11,17 +11,17 @@ namespace FlightService.Handlers
 {
     public class UserIsCreatedHandler : IRequestHandler<UserIsCreatedQuery,int>
     {
-        IFlightBusiness _flightBusiness; 
+        ILuggageLocationBusiness _luggageLocationBusiness; 
 
-        public UserIsCreatedHandler(IFlightBusiness flightBusiness)
+        public UserIsCreatedHandler(ILuggageLocationBusiness luggageLocationBusiness)
         {
-            _flightBusiness = flightBusiness;
+            _luggageLocationBusiness = luggageLocationBusiness;
         }
 
         
         public async Task<int> Handle(UserIsCreatedQuery request, CancellationToken cancellationToken)
         {
-            return await _flightBusiness.UserIsCreated(request.guidOfEvent);
+            return await _luggageLocationBusiness.UserIsCreated(request.guidOfEvent);
         }
 
         

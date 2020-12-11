@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    public class LuggageLocationBusiness : ILuggageLocation
+    public class LuggageLocationBusiness : ILuggageLocationBusiness
     {
 
         ILuggageAndDestinationDatabase _luggageAndDestinationDatabase;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    public interface ILuggageLocation
+    public interface ILuggageLocationBusiness
     {
         List<Airline> Get();
         Airline Get(int id);

@@ -16,9 +16,9 @@ namespace FlightService.Controllers
     public class FlightController : ControllerBase
     {
         IMediator _mediator;
-        ILuggageLocation _luggageLocationBusiness;
+        ILuggageLocationBusiness _luggageLocationBusiness;
 
-        public FlightController(ILuggageLocation luggageLocationBusiness,IMediator mediator)
+        public FlightController(ILuggageLocationBusiness luggageLocationBusiness,IMediator mediator)
         {
             _mediator = mediator;
             _luggageLocationBusiness = luggageLocationBusiness;
@@ -27,7 +27,7 @@ namespace FlightService.Controllers
         [HttpPost]
         public Holder<FlightOrder> DeleteFlightOrder([FromBody]FlightOrder flightOrder)
         {
-            Holder<FlightOrder> retVal = _flightBusiness.DeleteFlightOrder(flightOrder);
+            Holder<FlightOrder> retVal = _luggageLocationBusiness.DeleteFlightOrder(flightOrder);
             return retVal;
         }
 
@@ -43,7 +43,7 @@ namespace FlightService.Controllers
         [HttpGet]
         public List<FlightOrder> GetFlightOrders()
         {
-            List<FlightOrder> orders = _flightBusiness.GetFlightOrders();
+            List<FlightOrder> orders = _luggageLocationBusiness.GetFlightOrders();
 
             return orders;
         }
@@ -53,7 +53,7 @@ namespace FlightService.Controllers
         public List<Airline> Get()
         {
 
-            List<Airline> retVal = _flightBusiness.Get();
+            List<Airline> retVal = _luggageLocationBusiness.Get();
 
             return retVal;
         }
@@ -61,20 +61,20 @@ namespace FlightService.Controllers
         [HttpGet]
         public List<FlightLuggage> GetFlightLuggage()
         {
-            return _flightBusiness.GetFlightLuggage();
+            return _luggageLocationBusiness.GetFlightLuggage();
         }
 
         [HttpGet("{id}", Name = "GetFlightLuggage")]
         public FlightLuggage GetFlightLuggage(int id)
         {
-            return _flightBusiness.GetFlightLuggage(id);
+            return _luggageLocationBusiness.GetFlightLuggage(id);
         }
 
         // GET: api/Airline/5
         [HttpGet("{id}", Name = "Get")]
         public Airline Get(int id)
         {
-            return _flightBusiness.Get(id);
+            return _luggageLocationBusiness.Get(id);
         }
 
         // POST: api/Airline
@@ -82,7 +82,7 @@ namespace FlightService.Controllers
         public Holder<Airline> AddAirline([FromBody] Airline airline)
         {
 
-            Holder<Airline> retValu = _flightBusiness.AddAirline(airline);
+            Holder<Airline> retValu = _luggageLocationBusiness.AddAirline(airline);
 
 
 
@@ -94,7 +94,7 @@ namespace FlightService.Controllers
         [HttpPost]
         public Holder<Destination> AddDestination([FromBody] Destination destination)
         {
-            Holder<Destination> retVal = _flightBusiness.AddDestination(destination);
+            Holder<Destination> retVal = _luggageLocationBusiness.AddDestination(destination);
 
             return retVal;
         }
@@ -103,14 +103,14 @@ namespace FlightService.Controllers
         public List<Destination> GetDestinations()
         {
 
-            return _flightBusiness.GetDestinations();
+            return _luggageLocationBusiness.GetDestinations();
         }
 
 
         [HttpPost]
         public Holder<FlightOrder> ConfirmFlight([FromBody]FlightOrder flightOrder)
         {
-            Holder<FlightOrder> retVal = _flightBusiness.ConfirmFlight(flightOrder);
+            Holder<FlightOrder> retVal = _luggageLocationBusiness.ConfirmFlight(flightOrder);
 
             return retVal;
         }
@@ -119,7 +119,7 @@ namespace FlightService.Controllers
         public Holder<FlightOrder> OrderFlight([FromBody]FlightOrder flightOrder)
         {
 
-            Holder<FlightOrder> retVal = _flightBusiness.OrderFlight(flightOrder);
+            Holder<FlightOrder> retVal = _luggageLocationBusiness.OrderFlight(flightOrder);
 
             return retVal;
         }
@@ -128,7 +128,7 @@ namespace FlightService.Controllers
         [HttpPost]
         public Holder<Flight> AddFlight([FromBody]Flight flight)
         {
-            Holder<Flight> retval = _flightBusiness.AddFlight(flight);
+            Holder<Flight> retval = _luggageLocationBusiness.AddFlight(flight);
 
             return retval;
         }
@@ -136,33 +136,33 @@ namespace FlightService.Controllers
         [HttpPost]
         public Holder<FlightLuggage> AddFlightLuggage([FromBody] FlightLuggage flightLuggage)
         {
-            return _flightBusiness.AddFlightLuggage(flightLuggage);
+            return _luggageLocationBusiness.AddFlightLuggage(flightLuggage);
         }
 
         [HttpPost]
         public List<Airline> Search([FromBody] SearchObject searchObject)
         {
-            return _flightBusiness.Search(searchObject);
+            return _luggageLocationBusiness.Search(searchObject);
         }
 
         [HttpPost]
         public List<Airline> Filter([FromBody]FilterObject filterObject)
         {
-            return _flightBusiness.Filter(filterObject);
+            return _luggageLocationBusiness.Filter(filterObject);
         }
 
         // PUT: api/Airline/5
         [HttpPost]
         public Holder<Airline> EditAirline([FromBody] Airline airline)
         {
-            return _flightBusiness.EditAirline(airline);
+            return _luggageLocationBusiness.EditAirline(airline);
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public Holder<Airline> Delete(int id)
         {
-            return _flightBusiness.DeleteAirline(id);
+            return _luggageLocationBusiness.DeleteAirline(id);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace FlightService
             });
 
            
-            services.AddTransient<IFlightBusiness, LuggageLocationBusiness>(function => new LuggageLocationBusiness(new LuggageAndDestinationDatabase()));
+            services.AddTransient<ILuggageLocationBusiness, LuggageLocationBusiness>(function => new LuggageLocationBusiness(new LuggageAndDestinationDatabase()));
             services.AddMediatR(typeof(Startup));
 
         }
