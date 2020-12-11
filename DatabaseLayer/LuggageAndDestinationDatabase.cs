@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseLayer
 {
-    public class FlightDatabase : IFlightDatabase
+    public class LuggageAndDestinationDatabase : ILuggageAndDestinationDatabase
     {
         DocumentStore _eventStore = EventStore.getStore();
 
-        public async Task UserIsCreated(Guid guid)
+        public async Task<int> UserIsCreated(Guid guid)
         {
             UserAdded userAddedEvent = new UserAdded();
 
@@ -23,8 +23,7 @@ namespace DatabaseLayer
             {
                 var event1 = await session.Events.FetchStreamAsync(guid);
                 userAddedEvent = (UserAdded)event1[0].Data;
-
-                await session.SaveChangesAsync();
+                
                 
             }
 
@@ -34,9 +33,16 @@ namespace DatabaseLayer
                 {
                     userAddedEvent.User.UserId = 0;
                     context.Add(userAddedEvent.User);
-                    await context.SaveChangesAsync();
+                    int retval = await context.SaveChangesAsync();
+
+                    
+                    if (retval != 0)
+                        return retval;
+                    else
+                        throw new Exception("Creating user was unsuccessful");
                 }
             }
+            return -1;
 
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business;
 using DatabaseLayer;
+using MediatR;
 using DatabaseLayer.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,15 +46,16 @@ namespace FlightService
                 });
             });
 
-
+            
             services.AddDbContext<DataContext>(options =>
             {
 
                 options.UseSqlServer(Configuration.GetSection("MyConnectionString").Value);
             });
 
-
-            services.AddTransient<IFlightBusiness, FlightBusiness>(function => new FlightBusiness(new FlightDatabase()));
+           
+            services.AddTransient<IFlightBusiness, LuggageLocationBusiness>(function => new LuggageLocationBusiness(new LuggageAndDestinationDatabase()));
+            services.AddMediatR(typeof(Startup));
 
         }
 

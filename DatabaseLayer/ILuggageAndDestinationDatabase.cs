@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace DatabaseLayer
 {
-    public interface IFlightDatabase
+    public interface ILuggageAndDestinationDatabase
     {
         List<Airline> Get();
         List<Airline> Search(SearchObject searchObject);
         List<Airline> SearchWithDestination(SearchObject searchObject);
         List<Airline> Filter(List<Airline> airlines);
         List<FlightOrder> GetFlightOrders();
-        Task UserIsCreated(Guid guid);
+        Task<int> UserIsCreated(Guid guid);
 
         Airline Get(int id);
         bool ConfirmFlight(FlightOrder flightOrder);

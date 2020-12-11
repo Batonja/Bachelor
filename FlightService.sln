@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightService", "FlightService\FlightService.csproj", "{6ECEA0C4-B5C9-4B05-8DEA-646CD8DA9624}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuggageAndDestination", "FlightService\LuggageAndDestination.csproj", "{6ECEA0C4-B5C9-4B05-8DEA-646CD8DA9624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{A7E37727-E41F-49C7-8231-0EBCD1D854DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{A7E37727-E41F-49C7-8231-0EBCD1D854DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseLayer", "DatabaseLayer\DatabaseLayer.csproj", "{EB27BCB8-800D-402C-BF28-88E895B847B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseLayer", "DatabaseLayer\DatabaseLayer.csproj", "{EB27BCB8-800D-402C-BF28-88E895B847B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{9ADA5562-846B-4B04-81AC-57ADCA658E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{9ADA5562-846B-4B04-81AC-57ADCA658E13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

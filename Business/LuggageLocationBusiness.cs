@@ -8,19 +8,29 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    public class FlightBusiness : IFlightBusiness
+    public class LuggageLocationBusiness : ILuggageLocation
     {
 
-        IFlightDatabase _flightDatabase;
+        ILuggageAndDestinationDatabase _luggageAndDestinationDatabase;
 
-        public async Task UserIsCreated(Guid guid)
+        public async Task<int> UserIsCreated(Guid guid)
         {
-            await _flightDatabase.UserIsCreated(guid);
+
+            int retVal = 0;
+
+            try { 
+                 retVal = await _luggageAndDestinationDatabase.UserIsCreated(guid);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception with message:\n{e.Message}" );
+            }
+            return retVal;
         }
 
-        public FlightBusiness(IFlightDatabase flightDatabase)
+        public LuggageLocationBusiness(ILuggageAndDestinationDatabase flightDatabase)
         {
-            _flightDatabase = flightDatabase;
+            _luggageAndDestinationDatabase = flightDatabase;
         }
 
         public List<Airline> Search(SearchObject searchObject)
@@ -28,9 +38,9 @@ namespace Business
             List<Airline> dbAirlines = new List<Airline>();
 
             if (searchObject.Destination != null)
-                dbAirlines = _flightDatabase.SearchWithDestination(searchObject);
+                dbAirlines = _luggageAndDestinationDatabase.SearchWithDestination(searchObject);
             else
-                dbAirlines = _flightDatabase.Search(searchObject);
+                dbAirlines = _luggageAndDestinationDatabase.Search(searchObject);
 
             return dbAirlines;
 
@@ -43,10 +53,10 @@ namespace Business
 
             if (filterObject.Airlines.Count > 0)
             {
-                airlinesWithFilteredTitles = _flightDatabase.Filter(filterObject.Airlines);
+                airlinesWithFilteredTitles = _luggageAndDestinationDatabase.Filter(filterObject.Airlines);
             }
             else
-                airlinesWithFilteredTitles = _flightDatabase.Get();
+                airlinesWithFilteredTitles = _luggageAndDestinationDatabase.Get();
 
 
             if (filterObject.TripLengthOption == 1 || filterObject.TripLengthOption == -1 || filterObject.TripLengthOption == 5)
@@ -61,13 +71,13 @@ namespace Business
 
         public Holder<Airline> AddAirline(Airline airline)
         {
-            Airline airlineFromDB = _flightDatabase.Get(airline.AirlineId);
+            Airline airlineFromDB = _luggageAndDestinationDatabase.Get(airline.AirlineId);
 
             if (airlineFromDB != null)
                 return CheckAirline(airline, 404, "Airline you're trying to add already exists");
 
 
-            if (_flightDatabase.AddAirline(airline))
+            if (_luggageAndDestinationDatabase.AddAirline(airline))
                 return CheckAirline(airline, 200, "");
 
             return CheckAirline(airline, 500, "Error while trying to add airline");
@@ -75,12 +85,12 @@ namespace Business
 
         public Holder<Airline> DeleteAirline(int airlineId)
         {
-            Airline airlineFromDb = _flightDatabase.Get(airlineId);
+            Airline airlineFromDb = _luggageAndDestinationDatabase.Get(airlineId);
 
             if (airlineFromDb.AirlineId <= 0)
                 return CheckAirline(new Airline(), 404, "Airline you'retrying to delete doesn't exists");
 
-            if (_flightDatabase.DeleteAirline(airlineId))
+            if (_luggageAndDestinationDatabase.DeleteAirline(airlineId))
                 return CheckAirline(new Airline(), 200, "");
 
             return CheckAirline(new Airline(), 400, "Unable to delete airline");
@@ -88,12 +98,12 @@ namespace Business
 
         public Holder<Airline> EditAirline(Airline airline)
         {
-            Airline airlineFromDB = _flightDatabase.Get(airline.AirlineId);
+            Airline airlineFromDB = _luggageAndDestinationDatabase.Get(airline.AirlineId);
 
             if (airlineFromDB.AirlineId <= 0)
                 return CheckAirline(airline, 404, "Airline you're trying to edit doesn't exists");
 
-            if (!_flightDatabase.EditAirline(airline))
+            if (!_luggageAndDestinationDatabase.EditAirline(airline))
                 return CheckAirline(airline, 500, "Unable to edit airline");
 
 
@@ -105,7 +115,7 @@ namespace Business
                     if (seat.SeatId == 0)
                     {
                         seat.Flight = flight;
-                        if (!_flightDatabase.AddSeat(seat))
+                        if (!_luggageAndDestinationDatabase.AddSeat(seat))
                             return CheckAirline(airline, 500, "Unable to add seats");
                     }
 
@@ -131,7 +141,7 @@ namespace Business
 
                     if (aflToAdd != null)
                     {
-                        if (!_flightDatabase.AddAirlineFlightLuggage(aflToAdd))
+                        if (!_luggageAndDestinationDatabase.AddAirlineFlightLuggage(aflToAdd))
                             return CheckAirline(airline, 500, "Unable to add AirlineFlightLuggage while editing airline");
                     }
                 }
@@ -144,34 +154,34 @@ namespace Business
 
         public List<Airline> Get()
         {
-            List<Airline> retVal = _flightDatabase.Get();
+            List<Airline> retVal = _luggageAndDestinationDatabase.Get();
 
             return retVal;
         }
 
         public Airline Get(int id)
         {
-            return _flightDatabase.Get(id);
+            return _luggageAndDestinationDatabase.Get(id);
         }
 
         public List<FlightOrder> GetFlightOrders()
         {
-            return _flightDatabase.GetFlightOrders();
+            return _luggageAndDestinationDatabase.GetFlightOrders();
         }
         public Holder<FlightOrder> DeleteFlightOrder(FlightOrder flightOrder)
         {
-            if (!_flightDatabase.FreeSeat(flightOrder.Seat))
+            if (!_luggageAndDestinationDatabase.FreeSeat(flightOrder.Seat))
                 return CheckFlightOrder(flightOrder, 400, "Server error while trying to free the seat");
 
-            return _flightDatabase.DeleteFlightOrder(flightOrder) ? CheckFlightOrder(flightOrder, 200, "") :
+            return _luggageAndDestinationDatabase.DeleteFlightOrder(flightOrder) ? CheckFlightOrder(flightOrder, 200, "") :
                 CheckFlightOrder(flightOrder, 400, "Server error while trying to delete flightOrder");
         }
         public Holder<FlightOrder> OrderFlight(FlightOrder flightOrder)
         {
 
-            flightOrder.FlightLuggage = _flightDatabase.GetFlightLuggage(flightOrder.FlightLuggage.FlightLuggageId);
+            flightOrder.FlightLuggage = _luggageAndDestinationDatabase.GetFlightLuggage(flightOrder.FlightLuggage.FlightLuggageId);
 
-            /*_flightDatabase.AddTicket(flightOrder.FlightTicket);
+            /*_luggageAndDestinationDatabase.AddTicket(flightOrder.FlightTicket);
 
             if (ticket != null) { }
                 
@@ -179,12 +189,12 @@ namespace Business
                 return CheckFlightOrder(null, 400, "Unable to add ticket to database");
                 */
 
-            flightOrder.Seat = _flightDatabase.EditSeat(flightOrder.Seat);
+            flightOrder.Seat = _luggageAndDestinationDatabase.EditSeat(flightOrder.Seat);
 
-            if (!_flightDatabase.AddFlightOrder(flightOrder))
+            if (!_luggageAndDestinationDatabase.AddFlightOrder(flightOrder))
                 return CheckFlightOrder(null, 400, "Unable to add flight order");
 
-            if (_flightDatabase.EditSeat(flightOrder.Seat) == null)
+            if (_luggageAndDestinationDatabase.EditSeat(flightOrder.Seat) == null)
                 return CheckFlightOrder(null, 400, "Unable to add edit seat");
 
             return CheckFlightOrder(flightOrder, 200, "");
@@ -193,18 +203,18 @@ namespace Business
 
         public Holder<FlightOrder> ConfirmFlight(FlightOrder flightOrder)
         {
-            return _flightDatabase.ConfirmFlight(flightOrder) ? CheckFlightOrder(flightOrder, 200, "") :
+            return _luggageAndDestinationDatabase.ConfirmFlight(flightOrder) ? CheckFlightOrder(flightOrder, 200, "") :
                 CheckFlightOrder(flightOrder, 400, "Error while trying to confirm flight");
         }
 
         public List<FlightLuggage> GetFlightLuggage()
         {
-            return _flightDatabase.GetFlightLuggage();
+            return _luggageAndDestinationDatabase.GetFlightLuggage();
         }
 
         public Holder<FlightLuggage> AddFlightLuggage(FlightLuggage flightLuggage)
         {
-            List<FlightLuggage> flightLuggageList = _flightDatabase.GetFlightLuggage();
+            List<FlightLuggage> flightLuggageList = _luggageAndDestinationDatabase.GetFlightLuggage();
 
             if (flightLuggage.FlightLuggageType.GetType() == typeof(DBNull))
                 return CheckFlightLuggage(flightLuggage, 400, "Flight luggage must have type");
@@ -216,7 +226,7 @@ namespace Business
 
             }
 
-            if (_flightDatabase.AddFlightLuggage(flightLuggage))
+            if (_luggageAndDestinationDatabase.AddFlightLuggage(flightLuggage))
                 return CheckFlightLuggage(flightLuggage, 200, "");
 
             return CheckFlightLuggage(flightLuggage, 500, "Unable to add flight luggage");
@@ -225,13 +235,13 @@ namespace Business
 
         public FlightLuggage GetFlightLuggage(int id)
         {
-            return _flightDatabase.GetFlightLuggage(id);
+            return _luggageAndDestinationDatabase.GetFlightLuggage(id);
         }
 
 
         public Holder<Destination> AddDestination(Destination destination)
         {
-            List<Destination> destinationsFromDB = _flightDatabase.GetDestinations();
+            List<Destination> destinationsFromDB = _luggageAndDestinationDatabase.GetDestinations();
 
             foreach (var destinationFromDB in destinationsFromDB)
             {
@@ -239,7 +249,7 @@ namespace Business
                     return CheckDestination(destination, 400, "This destination already exists in database");
             }
 
-            if (_flightDatabase.AddDestination(destination))
+            if (_luggageAndDestinationDatabase.AddDestination(destination))
                 return CheckDestination(destination, 200, "");
 
             return CheckDestination(destination, 500, "Error while trying to add destination");
@@ -247,7 +257,7 @@ namespace Business
 
         public List<Destination> GetDestinations()
         {
-            return _flightDatabase.GetDestinations();
+            return _luggageAndDestinationDatabase.GetDestinations();
         }
 
 
@@ -256,7 +266,7 @@ namespace Business
             if (flight.FlightId < 0)
                 flight.FlightId = 0;
 
-            return _flightDatabase.AddFlight(flight) ? CheckFlight(flight, 200, "") : CheckFlight(flight, 500, "Flight cannot be added");
+            return _luggageAndDestinationDatabase.AddFlight(flight) ? CheckFlight(flight, 200, "") : CheckFlight(flight, 500, "Flight cannot be added");
         }
 
         #region helpers

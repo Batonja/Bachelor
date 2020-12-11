@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Business;
 using Common.ErrorObjects;
 using Common.Models;
+using FlightService.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlightService.Controllers
@@ -13,12 +15,13 @@ namespace FlightService.Controllers
     [ApiController]
     public class FlightController : ControllerBase
     {
+        IMediator _mediator;
+        ILuggageLocation _luggageLocationBusiness;
 
-        IFlightBusiness _flightBusiness;
-
-        public FlightController(IFlightBusiness flightBusiness)
+        public FlightController(ILuggageLocation luggageLocationBusiness,IMediator mediator)
         {
-            _flightBusiness = flightBusiness;
+            _mediator = mediator;
+            _luggageLocationBusiness = luggageLocationBusiness;
         }
 
         [HttpPost]
@@ -29,9 +32,12 @@ namespace FlightService.Controllers
         }
 
         [HttpPost]
-        public async Task UserIsCreated([FromBody]Guid guid)
+        public async Task<IActionResult> UserIsCreated([FromBody]Guid guid)
         {
-            await _flightBusiness.UserIsCreated(guid);
+            var query = new UserIsCreatedQuery(guid);
+            var result  = await _mediator.Send(query);
+            return Ok(result);
+            
         }
 
         [HttpGet]

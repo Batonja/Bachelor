@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    public interface IFlightBusiness
+    public interface ILuggageLocation
     {
         List<Airline> Get();
         Airline Get(int id);
         List<Airline> Search(SearchObject searchObject);
         List<Airline> Filter(FilterObject filterObject);
         List<FlightOrder> GetFlightOrders();
-        Task UserIsCreated(Guid guid);
+        Task<int> UserIsCreated(Guid guid);
         Holder<FlightOrder> ConfirmFlight(FlightOrder flightOrder);
         Holder<FlightOrder> DeleteFlightOrder(FlightOrder flightOrder);
         Holder<FlightOrder> OrderFlight(FlightOrder flightOrder);
